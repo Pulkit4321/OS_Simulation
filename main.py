@@ -1,4 +1,6 @@
-disk = [None] * 1024 # 1024 blocks in the disk
+n = int(input("Enter the size of the disk you want in MB: "))
+disk = [None] * n 
+print("The Disk of length {} is sucessfully simulated with each partition of size 1 MB".format(n))
 total_blocks = len(disk)
 used_blocks = 0
 
@@ -65,9 +67,21 @@ def calculate_fragmentation():
             free_blocks += 1
     return free_blocks
 
+def compact():
+    global disk
+    global used_blocks
+    new_disk = [None] * total_blocks
+    j = 0
+    for i in range(total_blocks):
+        if disk[i] != None:
+            new_disk[j] = disk[i]
+            j += 1
+    disk = new_disk
+    used_blocks = j
+
 time = -1
 print("==++Choice Menu++==")
-print("1) Creating a File\n2) Deleting a File\n3) Renaming a File\n4) Moveing a File\n5) Calculate Fragmentation\n0) Stopping the Simulation")
+print("1) Creating a File\n2) Deleting a File\n3) Renaming a File\n4) Moving a File\n5) Calculate Fragmentation\n6) Compact Disk\n7) Print Disk\n0) Stopping the Simulation")
 print("===================")
 while(time!=0):
     time = int(input("Enter Choice: "))
@@ -93,10 +107,15 @@ while(time!=0):
             print("The file wasn't renamed as it did not exist.")
     elif(time==4):
         name = input("Enter name of file to be moved with extention: ")
-        location = int(input("Enter the location at which you need to move the file: "))
+        location = int(input("Enter the new location at which you need to move the file: "))
         if(move_file(name,location)):
             print("The file has been sucessfully moved to the new location")
         else:
             print("The file doesn't exist or not enough space at new location")
     elif(time==5):
         print("No. of Fragmented blocks are: {}".format(calculate_fragmentation()))
+    elif(time==6):
+        compact()
+        print("Compactation Sucessfull")
+    elif(time==7):
+        print(disk)
